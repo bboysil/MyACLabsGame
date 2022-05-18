@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour
             hasPowerUp = true;
             Destroy(other.gameObject);
             powerupIndicator.gameObject.SetActive(true);
+            StartCoroutine(PowerupCountdownRoutine());
         }
     }
 
@@ -53,6 +54,22 @@ public class PlayerController : MonoBehaviour
             enemyRigidBody.AddForce(awayFromPlayer * powerupStrength, ForceMode.Impulse);
 
             powerupIndicator.gameObject.SetActive(false);
+            hasPowerUp = false;
         }
+    }
+
+
+    IEnumerator PowerupCountdownRoutine()
+    {
+        yield return new WaitForSeconds(5f);
+       
+        for (int i = 0; i < 10; ++i)
+        {
+            bool previousState = powerupIndicator.gameObject.activeInHierarchy;
+            powerupIndicator.gameObject.SetActive(!previousState);
+            yield return new WaitForSeconds(0.2f);
+        }
+        powerupIndicator.gameObject.SetActive(false);
+        hasPowerUp = false;
     }
 }
